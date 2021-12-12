@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "630269364004",
+    "project_id": "followbus-b80ab",
+    "storage_bucket": "followbus-b80ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630269364004:android:debb165720385af5fc55b1",
+        "android_client_info": {
+          "package_name": "com.example.followbus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630269364004-jhjb2j9qa1i2adt3lm4ovaaerb9ubckr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApgFzvOYHrjZiltVex7EjMK2WOXwjZc0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630269364004-jhjb2j9qa1i2adt3lm4ovaaerb9ubckr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
