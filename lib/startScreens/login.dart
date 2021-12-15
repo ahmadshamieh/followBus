@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:followbus/adminPage/adminScreen.dart';
 import 'package:followbus/animation/FadeAnimation.dart';
+import 'package:followbus/homeScreenDriver.dart';
 import 'package:followbus/model/modelLogin.dart';
+import 'package:followbus/mservice/ApiDriverList.dart';
+import 'package:followbus/mservice/ApiStudentsList.dart';
 import 'package:followbus/mservice/Apilogin.dart';
 import 'package:followbus/startScreens/forgetPassword.dart';
 import 'package:followbus/startScreens/introScreen.dart';
@@ -42,7 +45,7 @@ class _State extends State<LoginPage> {
 
   trueReguser(msg) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => adminScreen()));
+        context, MaterialPageRoute(builder: (context) => HomePageDriver()));
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -51,8 +54,10 @@ class _State extends State<LoginPage> {
             content: Text(msg),
           );
         });
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => adminScreen()));
+    createStudentListData();
+    createDriverListData();
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (context) => adminScreen()));
   }
 
   void _trysubmit() async {
@@ -68,7 +73,7 @@ class _State extends State<LoginPage> {
           email.trim(),
           password.trim(),
         ).then((value) => (value.error.toString() == "false")
-            ? value.data.isAdmin == "0"
+            ? value.data.isAdmin == "1"
                 ? trueRegadmin(value.message)
                 : trueReguser(value.message)
             : NavigatorMethodStateserorr(value.message));
@@ -194,7 +199,8 @@ class _State extends State<LoginPage> {
                                               BorderSide(color: Colors.black)),
                                       labelText: "Email"),
                                   validator: (value) {
-                                    if (value.isEmpty || !value.contains('@')) {
+                                    //|| !value.contains('@')
+                                    if (value.isEmpty) {
                                       return 'Enter a valid email';
                                     } else {
                                       return null;

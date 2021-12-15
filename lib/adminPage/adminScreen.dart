@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:followbus/adminPage/addDriverAdmin.dart';
 import 'package:followbus/adminPage/addStudantAdmain.dart';
 import 'package:followbus/animation/FadeAnimation.dart';
-import 'package:followbus/homeScreenDriver.dart';
-import 'package:followbus/startScreens/introScreen.dart';
-import 'package:followbus/startScreens/signup.dart';
 
 //followbus3@gmail.com
 //follow2021_3
