@@ -3,12 +3,14 @@ import 'package:followbus/adminPage/adminScreen.dart';
 import 'package:followbus/animation/FadeAnimation.dart';
 import 'package:followbus/homeScreenDriver.dart';
 import 'package:followbus/model/modelLogin.dart';
+import 'package:followbus/model/modelStudentsList.dart';
 import 'package:followbus/mservice/ApiDriverList.dart';
 import 'package:followbus/mservice/ApiStudentsList.dart';
 import 'package:followbus/mservice/Apilogin.dart';
 import 'package:followbus/startScreens/forgetPassword.dart';
 import 'package:followbus/startScreens/introScreen.dart';
 import 'package:followbus/startScreens/signup.dart';
+import 'package:followbus/test.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -43,19 +45,30 @@ class _State extends State<LoginPage> {
         });
   }
 
-  trueReguser(msg) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomePageDriver()));
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Alert Dialog"),
-            content: Text(msg),
-          );
-        });
-    createStudentListData();
+  trueReguser(
+    msg,
+  ) {
+    newScreen(List<DataS> dataS) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePageDriver(
+                    datas: dataS,
+                  )));
+    }
+
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Text("Alert Dialog"),
+    //         content: Text(msg),
+    //       );
+    //     });
     createDriverListData();
+    createStudentListData()
+        .then((value) => value.error == false ? newScreen(value.data) : value);
+
     // Navigator.push(
     //     context, MaterialPageRoute(builder: (context) => adminScreen()));
   }
@@ -75,14 +88,16 @@ class _State extends State<LoginPage> {
         ).then((value) => (value.error.toString() == "false")
             ? value.data.isAdmin == "1"
                 ? trueRegadmin(value.message)
-                : trueReguser(value.message)
+                : value.data.isAdmin == "0"
+                    ? trueReguser(value.message)
+                    : value
             : NavigatorMethodStateserorr(value.message));
         //  trueReg("The driver has been registered successfully");
       } catch (err) {
         String message = '';
         if (err.message != null) {
           message = err.message;
-          trueReguser(message);
+          //    trueReguser(message);
         }
         print(message);
       }

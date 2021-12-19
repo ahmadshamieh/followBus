@@ -1,7 +1,7 @@
 class StudentListData {
   bool error;
   String message;
-  List<Data> data;
+  List<DataS> data;
 
   StudentListData({this.error, this.message, this.data});
 
@@ -9,9 +9,9 @@ class StudentListData {
     error = json['error'];
     message = json['message'];
     if (json['data'] != null) {
-      data = new List<Data>();
+      data = new List<DataS>();
       json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data.add(new DataS.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class StudentListData {
   }
 }
 
-class Data {
+class DataS {
   String id;
   String name;
   String latitude;
@@ -35,8 +35,9 @@ class Data {
   String location;
   String classR;
   String phone;
+  dynamic distance;
 
-  Data(
+  DataS(
       {this.id,
       this.name,
       this.latitude,
@@ -45,7 +46,7 @@ class Data {
       this.classR,
       this.phone});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataS.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     latitude = json['latitude'];
@@ -65,5 +66,9 @@ class Data {
     data['class'] = this.classR;
     data['phone'] = this.phone;
     return data;
+  }
+
+  setDistance(dynamic d) {
+    this.distance = d;
   }
 }

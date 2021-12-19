@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:followbus/model/modelStudentsList.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:latlong/latlong.dart';
@@ -7,13 +8,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePageDriver extends StatefulWidget {
+  final List<DataS> datas;
+  HomePageDriver({
+    @required this.datas,
+  });
   @override
   _State createState() => _State();
 }
 
 class _State extends State<HomePageDriver> {
   double longitude = 0, latitude = 0;
-  List<String> filter = List();
+  List<DataS> filter = List();
   _getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -56,6 +61,7 @@ class _State extends State<HomePageDriver> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.datas);
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -140,88 +146,84 @@ class _State extends State<HomePageDriver> {
               ),
             ],
           ),
-
-          // Container(
-          //   child: Container(
-          //     //      height: screenWidth * 7 / 16,
-          //     child: ListView(
-          //       children: List.generate(2, (index) {
-          //         double distance = widget.clientBranches[index].distance;
-          //         filter = widget.clientBranches;
-          //         widget.clientBranches.forEach((element) {
-          //           String latAndLong = element.branchLocation;
-          //           List splitLocation = latAndLong
-          //               .replaceAll('(', '')
-          //               .replaceAll(')', '')
-          //               .split(',');
-          //           //  print(splitLocation);
-          //           element.setDistance(_getDistance(splitLocation));
-          //         });
-
-          //         filter.sort((a, b) => a.distance.compareTo(b.distance));
-
-          //         return Column(
-          //           children: <Widget>[
-          //             Container(
-          //               margin: EdgeInsets.only(left: 15, right: 15),
-          //               decoration: BoxDecoration(
-          //                 border: Border.all(color: Colors.black),
-          //                 borderRadius: BorderRadius.all(Radius.circular(30)),
-          //                 color: Colors.white,
-          //               ),
-          //               child: Row(
-          //                 children: <Widget>[
-          //                   Expanded(
-          //                     child: Container(
-          //                       decoration: BoxDecoration(
-          //                         borderRadius: BorderRadius.all(
-          //                           Radius.circular(30),
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   IconButton(
-          //                     icon: Icon(
-          //                       Icons.location_on,
-          //                       color: Colors.pink[500],
-          //                       size: 30,
-          //                     ),
-          //                     onPressed: () => openMap(
-          //                         widget.clientBranches[index].branchLocation),
-          //                     //  GoogleMap(                                                    //   onMapCreated:
-          //                     //       _onMapCreated,
-          //                     //   initialCameraPosition:
-          //                     //       CameraPosition(
-          //                     //     target: _center,
-          //                     //     zoom: 90.0,
-          //                     //   ),
-          //                     // ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //             Divider(
-          //               height: 6.0,
-          //             ),
-          //           ],
-          //         );
-          //       }),
-          //     ),
-          //   ),
-          // ),
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Card(context, "20", "ahmad", "1", "7:30 AM"),
+            padding: const EdgeInsets.only(top: 30.0),
+            child: Container(
+              height: screenHeight - screenHeight * .1,
+              child: ListView(
+                children: List.generate(widget.datas.length, (index) {
+                  double distance = widget.datas[index].distance;
+                  String lat;
+                  String long;
+                  filter = widget.datas;
+                  widget.datas.forEach((element) {
+                    lat = double.parse(element.latitude) >= 99
+                        ? "0"
+                        : element.latitude;
+                    long = double.parse(element.longitude) >= 99
+                        ? "0"
+                        : element.longitude;
+                    // List splitLocation = latAndLong
+                    //     .replaceAll('(', '')
+                    //     .replaceAll(')', '')
+                    //     .split(',');
+                    //  print(splitLocation);
+                    List splitLocation;
+
+                    splitLocation = [lat, long];
+                    print(splitLocation);
+                    element.setDistance(_getDistance(splitLocation));
+                  });
+
+                  filter.sort((a, b) => a.distance.compareTo(b.distance));
+                  List splitLocation = [lat, long];
+                  return Card(
+                      context,
+                      filter[index].name.toString(),
+                      "7:50",
+                      distance.toString(),
+                      '[${filter[index].latitude},${filter[index].longitude}]');
+                }),
+              ),
+            ),
           ),
-          Card(context, "21", "rania", "2", "7:40 AM"),
-          Card(context, "22", "jorg", "3", "7:50 AM"),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 20.0),
+          //   child: Card(context, "20", "ahmad", "1", "7:30 AM"),
+          // ),
+          // Card(context, "21", "rania", "2", "7:40 AM"),
+          //  Card(context, "22", "jorg", "3", "7:50 AM"),
+          // Container(
+          //   height: screenHeight - screenHeight * .1,
+          //   child: ListView.builder(
+          //     itemCount: widget.datas.length,
+          //     itemBuilder: (context, i) {
+          //       return Card(
+          //           context, widget.datas[i].name.toString(), "7:50 AM");
+          //       // return ListTile(
+          //       //   title: Text(widget.datas[i].classR.toString()),
+          //       // );
+          //     },
+          //   ),
+          // )
         ],
       ),
     );
   }
 }
 
-Widget Card(context, String OrderNum, String name, String status, String Taim) {
+Widget Card(
+    context, String name, String Taim, String distance, String latlong) {
+  Future<void> openMap() async {
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latlong';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
   final TextStyle cardTextStyle =
       Theme.of(context).textTheme.subtitle1.copyWith(
             color: Colors.white,
@@ -232,7 +234,7 @@ Widget Card(context, String OrderNum, String name, String status, String Taim) {
   return Container(
     padding: EdgeInsets.only(
         top: 20.0, left: screenWidth * .04, right: screenWidth * .04),
-    height: screenHeight * .3,
+    height: screenHeight * .38,
     child: Container(
       // height: screenHeight * .3,
       decoration: BoxDecoration(
@@ -242,6 +244,33 @@ Widget Card(context, String OrderNum, String name, String status, String Taim) {
               top: 20.0, left: screenWidth * .04, right: screenWidth * .04),
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Center(
+                    child: Text(
+                      ("(" + distance.toString() + "/Km" + ")"),
+                      style: TextStyle(color: Colors.orangeAccent),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.location_on,
+                      color: Colors.pink[500],
+                      size: 30,
+                    ),
+                    onPressed: () => openMap(),
+                    //  GoogleMap(                                                    //   onMapCreated:
+                    //       _onMapCreated,
+                    //   initialCameraPosition:
+                    //       CameraPosition(
+                    //     target: _center,
+                    //     zoom: 90.0,
+                    //   ),
+                    // ),
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

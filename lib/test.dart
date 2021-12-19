@@ -1,1 +1,139 @@
+import 'dart:collection';
 
+import 'package:flutter/material.dart';
+import 'package:followbus/model/modelStudentsList.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class map extends StatefulWidget {
+  final List<DataS> datas;
+  map({
+    @required this.datas,
+  });
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<map> {
+  GoogleMapController mapController; //contrller for Google map
+  final Set<Marker> markers = new Set(); //markers for google map
+  static const LatLng showLocation =
+      const LatLng(32.430252, 35.856717); //location to show in map
+  Set<Polygon> myPolygon() {
+    var polygonCoords = List<LatLng>();
+    for (int i = 0; i < widget.datas.length; i++) {
+      print(widget.datas[i].name);
+      polygonCoords.add(
+        LatLng(double.parse(widget.datas[i].latitude),
+            double.parse(widget.datas[i].longitude)),
+      );
+    }
+
+    //  polygonCoords.add(LatLng(32.53083, 35.88224));
+    //  polygonCoords.add(LatLng(32.54933, 35.88112));
+    // polygonCoords.add(LatLng(32.537798, 35.856722));
+
+    var polygonSet = Set<Polygon>();
+    polygonSet.add(Polygon(
+        polygonId: PolygonId('1'),
+        points: polygonCoords,
+        fillColor: Colors.white10,
+        strokeWidth: 2,
+        strokeColor: Colors.blue));
+
+    return polygonSet;
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _setPolygons();
+  // }
+
+  // Set<Polygon> _polygons = HashSet<Polygon>();
+  // void _setPolygons() {
+  //   List<LatLng> polygonLatLongs = List<LatLng>();
+  //   polygonLatLongs.add(LatLng(32.537798, 35.856722));
+  //   polygonLatLongs.add(LatLng(32.53083, 35.88224));
+  //   polygonLatLongs.add(LatLng(32.54933, 35.88112));
+
+  //   //   polygonCoords.add(LatLng(32.537798, 35.856722));
+  //   //   polygonCoords.add(LatLng(32.53083, 35.88224));
+  //   //   polygonCoords.add(LatLng(32.54933, 35.88112));
+  //   _polygons.add(
+  //     Polygon(
+  //         polygonId: PolygonId("0"),
+  //         points: polygonLatLongs,
+  //         fillColor: Colors.white10,
+  //         strokeWidth: 2,
+  //         strokeColor: Colors.blue),
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Multiple Markers in Google Map"),
+        backgroundColor: Colors.deepOrangeAccent,
+      ),
+      body: GoogleMap(
+          //Map widget from google_maps_flutter package
+          zoomGesturesEnabled: true, //enable Zoom in, out on map
+          initialCameraPosition: CameraPosition(
+            //innital position in map
+            target: showLocation, //initial position
+            zoom: 11.0, //initial zoom level
+          ),
+          markers: getmarkers(widget.datas), //markers to show on map
+          mapType: MapType.normal, //map type
+          onMapCreated: (controller) {
+            //method called when map is created
+            setState(() {
+              mapController = controller;
+            });
+          },
+          polygons: myPolygon()
+          // myPolygon(),
+          ),
+    );
+  }
+
+  Set<Marker> getmarkers(List<DataS> dataList) {
+    setState(() {
+      for (int i = 0; i < dataList.length; i++) {
+        print('${dataList[i].latitude}/${dataList[i].longitude}');
+        setState(() {
+          dataList[i].location == "123456"
+              ? markers.add(Marker(
+                  //add first marker
+                  markerId: MarkerId(showLocation.toString()),
+                  position: LatLng(double.parse(dataList[i].latitude),
+                      double.parse(dataList[i].longitude)),
+                  //    : showLocation, //position of marker
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: dataList[i].name,
+                    snippet: dataList[i].phone,
+                  ),
+                  icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+                ))
+              : DoNothingAction();
+        });
+      }
+    });
+
+    // markers.add(Marker(
+    //   //add first marker
+    //   markerId: MarkerId(showLocation.toString()),
+    //   position: LatLng(32.430252, 35.856717),
+    //   //    : showLocation, //position of marker
+    //   infoWindow: InfoWindow(
+    //     //popup info
+    //     title: 'Marker Title First ',
+    //     snippet: 'My Custom Subtitle',
+    //   ),
+    //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+    // ));
+    return markers;
+  }
+}

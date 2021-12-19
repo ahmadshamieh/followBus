@@ -35,6 +35,9 @@ dependencies:
   geolocator: ^6.1.13
   http:
   url_launcher: ^5.7.10
+  google_maps_flutter: ^1.2.0
+  flutter_polyline_points: ^0.2.2
+  flutter_polygon: ^0.1.0
 
 dev_dependencies:
   flutter_test:
