@@ -10,7 +10,6 @@ import 'package:followbus/mservice/Apilogin.dart';
 import 'package:followbus/startScreens/forgetPassword.dart';
 import 'package:followbus/startScreens/introScreen.dart';
 import 'package:followbus/startScreens/signup.dart';
-import 'package:followbus/test.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -45,26 +44,19 @@ class _State extends State<LoginPage> {
         });
   }
 
-  trueReguser(
-    msg,
-  ) {
+  trueReguser(msg, String location) {
     newScreen(List<DataS> dataS) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => HomePageDriver(
                     datas: dataS,
+                    location: location,
                   )));
     }
 
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: Text("Alert Dialog"),
-    //         content: Text(msg),
-    //       );
-    //     });
+    print("object");
+    print(location);
     createDriverListData();
     createStudentListData()
         .then((value) => value.error == false ? newScreen(value.data) : value);
@@ -89,7 +81,7 @@ class _State extends State<LoginPage> {
             ? value.data.isAdmin == "1"
                 ? trueRegadmin(value.message)
                 : value.data.isAdmin == "0"
-                    ? trueReguser(value.message)
+                    ? trueReguser(value.message, value.data.location)
                     : value
             : NavigatorMethodStateserorr(value.message));
         //  trueReg("The driver has been registered successfully");

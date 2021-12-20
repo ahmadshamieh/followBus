@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:followbus/model/modelStudentsList.dart';
+import 'package:followbus/mapScreen.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:latlong/latlong.dart';
@@ -7,10 +8,14 @@ import 'package:latlong/latlong.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+List<String> filterLocation = List();
+
 class HomePageDriver extends StatefulWidget {
   final List<DataS> datas;
+  final String location;
   HomePageDriver({
     @required this.datas,
+    @required this.location,
   });
   @override
   _State createState() => _State();
@@ -19,6 +24,7 @@ class HomePageDriver extends StatefulWidget {
 class _State extends State<HomePageDriver> {
   double longitude = 0, latitude = 0;
   List<DataS> filter = List();
+
   _getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -59,9 +65,20 @@ class _State extends State<HomePageDriver> {
     _getLocation();
   }
 
+  trueList() {
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (context) => LoginPage()));
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("driver have no Students"),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.datas);
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -113,7 +130,7 @@ class _State extends State<HomePageDriver> {
                           ),
                           child: Center(
                             child: Text(
-                              "ذهاب",
+                              "تفاصيل",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -126,15 +143,27 @@ class _State extends State<HomePageDriver> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              "إياب",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: screenWidth * .06,
-                                fontFamily: 'Pacifico',
+                        child: GestureDetector(
+                          onTap: () {
+                            filterLocation.length == 0
+                                ? trueList()
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => map(
+                                            datas: filter,
+                                            location: widget.location)));
+                          },
+                          child: Container(
+                            child: Center(
+                              child: Text(
+                                "خريطة",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: screenWidth * .06,
+                                  fontFamily: 'Pacifico',
+                                ),
                               ),
                             ),
                           ),
@@ -171,18 +200,21 @@ class _State extends State<HomePageDriver> {
                     List splitLocation;
 
                     splitLocation = [lat, long];
-                    print(splitLocation);
+                    //  filterLocation.add(filter)
+
                     element.setDistance(_getDistance(splitLocation));
                   });
 
                   filter.sort((a, b) => a.distance.compareTo(b.distance));
                   List splitLocation = [lat, long];
-                  return Card(
-                      context,
-                      filter[index].name.toString(),
-                      "7:50",
-                      distance.toString(),
-                      '[${filter[index].latitude},${filter[index].longitude}]');
+                  return filter[index].location == widget.location
+                      ? Card(
+                          context,
+                          filter[index].name.toString(),
+                          "7:50",
+                          distance.toString(),
+                          '[${filter[index].latitude},${filter[index].longitude}]')
+                      : Text("");
                 }),
               ),
             ),
@@ -224,6 +256,9 @@ Widget Card(
     }
   }
 
+  filterLocation.add(name);
+  print("filterLocation");
+  print(filterLocation);
   final TextStyle cardTextStyle =
       Theme.of(context).textTheme.subtitle1.copyWith(
             color: Colors.white,

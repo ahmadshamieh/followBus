@@ -2,12 +2,15 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:followbus/model/modelStudentsList.dart';
+import 'package:followbus/startScreens/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class map extends StatefulWidget {
   final List<DataS> datas;
+  final String location;
   map({
     @required this.datas,
+    @required this.location,
   });
   @override
   _HomeState createState() => _HomeState();
@@ -16,16 +19,31 @@ class map extends StatefulWidget {
 class _HomeState extends State<map> {
   GoogleMapController mapController; //contrller for Google map
   final Set<Marker> markers = new Set(); //markers for google map
-  static const LatLng showLocation =
-      const LatLng(32.430252, 35.856717); //location to show in map
+  static const LatLng showLocation = const LatLng(32.430252, 35.856717);
+  //location to show in map
+  trueRegadmin(msg) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("driver have no Students"),
+            content: Text(msg),
+          );
+        });
+  }
+
   Set<Polygon> myPolygon() {
     var polygonCoords = List<LatLng>();
     for (int i = 0; i < widget.datas.length; i++) {
       print(widget.datas[i].name);
-      polygonCoords.add(
-        LatLng(double.parse(widget.datas[i].latitude),
-            double.parse(widget.datas[i].longitude)),
-      );
+      widget.datas[i].location == widget.location
+          ? polygonCoords.add(
+              LatLng(double.parse(widget.datas[i].latitude),
+                  double.parse(widget.datas[i].longitude)),
+            )
+          : DoNothingAction();
     }
 
     //  polygonCoords.add(LatLng(32.53083, 35.88224));
@@ -82,7 +100,7 @@ class _HomeState extends State<map> {
           initialCameraPosition: CameraPosition(
             //innital position in map
             target: showLocation, //initial position
-            zoom: 11.0, //initial zoom level
+            zoom: 10.0, //initial zoom level
           ),
           markers: getmarkers(widget.datas), //markers to show on map
           mapType: MapType.normal, //map type
@@ -103,7 +121,7 @@ class _HomeState extends State<map> {
       for (int i = 0; i < dataList.length; i++) {
         print('${dataList[i].latitude}/${dataList[i].longitude}');
         setState(() {
-          dataList[i].location == "123456"
+          dataList[i].location == widget.location
               ? markers.add(Marker(
                   //add first marker
                   markerId: MarkerId(showLocation.toString()),
