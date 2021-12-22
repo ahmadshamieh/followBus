@@ -91,7 +91,7 @@ class _HomeState extends State<map> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Multiple Markers in Google Map"),
+        title: Text(" Google Map"),
         backgroundColor: Colors.deepOrangeAccent,
       ),
       body: GoogleMap(

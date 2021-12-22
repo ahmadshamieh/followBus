@@ -63,17 +63,15 @@ class _State extends State<addDriverAdmain> {
 
     if (isvalid) {
       _formkey.currentState.save();
-      // setState(() {
-      //   msgV = 'Loading...';
-      // });
+
       try {
         createDriver(
+          email.trim(),
+          password.trim(),
           name.trim(),
-          name.trim(),
-          name.trim(),
-          name.trim(),
-          name.trim(),
-          name.trim(),
+          phone.trim(),
+          location.trim(),
+          busNumber.trim(),
         ).then((value) => (value.error.toString() == "false")
             ? trueReguser(value.message)
             : NavigatorMethodStateserorr(value.message));

@@ -132,47 +132,47 @@ class _State extends State<adminScreen> {
                           ),
                         )),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: screenheight * .03),
-                    child: FadeAnimation(
-                        1.4,
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Container(
-                            height: screenheight * .12,
-                            padding: EdgeInsets.only(top: 3, left: 3),
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border(
-                                  bottom: BorderSide(color: Colors.black),
-                                  top: BorderSide(color: Colors.black),
-                                  left: BorderSide(color: Colors.black),
-                                  right: BorderSide(color: Colors.black),
-                                )),
-                            child: MaterialButton(
-                              minWidth: double.infinity,
-                              height: 50,
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => HomePageDriver()));
-                              },
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Text(
-                                "check trip",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 30,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        )),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: screenheight * .03),
+                  //   child: FadeAnimation(
+                  //       1.4,
+                  //       Padding(
+                  //         padding: EdgeInsets.symmetric(horizontal: 30),
+                  //         child: Container(
+                  //           height: screenheight * .12,
+                  //           padding: EdgeInsets.only(top: 3, left: 3),
+                  //           decoration: BoxDecoration(
+                  //               color: Colors.black,
+                  //               borderRadius: BorderRadius.circular(10),
+                  //               border: Border(
+                  //                 bottom: BorderSide(color: Colors.black),
+                  //                 top: BorderSide(color: Colors.black),
+                  //                 left: BorderSide(color: Colors.black),
+                  //                 right: BorderSide(color: Colors.black),
+                  //               )),
+                  //           child: MaterialButton(
+                  //             minWidth: double.infinity,
+                  //             height: 50,
+                  //             onPressed: () {
+                  //               // Navigator.push(
+                  //               //     context,
+                  //               //     MaterialPageRoute(
+                  //               //         builder: (context) => HomePageDriver()));
+                  //             },
+                  //             elevation: 0,
+                  //             shape: RoundedRectangleBorder(
+                  //                 borderRadius: BorderRadius.circular(50)),
+                  //             child: Text(
+                  //               "check trip",
+                  //               style: TextStyle(
+                  //                   fontWeight: FontWeight.w600,
+                  //                   fontSize: 30,
+                  //                   color: Colors.white),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )),
+                  // ),
                 ],
               ),
             ),

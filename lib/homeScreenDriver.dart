@@ -42,7 +42,7 @@ class _State extends State<HomePageDriver> {
             double.parse(splitLocation[0]), double.parse(splitLocation[1])),
         new LatLng(latitude, longitude));
     if (meter < 1000000) {
-      return meter / 1000;
+      return meter / 1000; // نق مليون متر من مكان السائق
     } else {
       return 0;
     }
@@ -72,7 +72,7 @@ class _State extends State<HomePageDriver> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("driver have no Students"),
+            title: Text("driver has no Students"),
           );
         });
   }
@@ -186,10 +186,10 @@ class _State extends State<HomePageDriver> {
                   String long;
                   filter = widget.datas;
                   widget.datas.forEach((element) {
-                    lat = double.parse(element.latitude) >= 99
+                    lat = double.parse(element.latitude) >= 99 //32
                         ? "0"
                         : element.latitude;
-                    long = double.parse(element.longitude) >= 99
+                    long = double.parse(element.longitude) >= 99 //35
                         ? "0"
                         : element.longitude;
                     // List splitLocation = latAndLong
@@ -199,7 +199,7 @@ class _State extends State<HomePageDriver> {
                     //  print(splitLocation);
                     List splitLocation;
 
-                    splitLocation = [lat, long];
+                    splitLocation = [lat, long]; //0lat  1 long
                     //  filterLocation.add(filter)
 
                     element.setDistance(_getDistance(splitLocation));
@@ -213,7 +213,7 @@ class _State extends State<HomePageDriver> {
                           filter[index].name.toString(),
                           "7:50",
                           distance.toString(),
-                          '[${filter[index].latitude},${filter[index].longitude}]')
+                          '[${filter[index].latitude},${filter[index].longitude}]') //[32.22222,35.25566]
                       : Text("");
                 }),
               ),
@@ -246,6 +246,7 @@ class _State extends State<HomePageDriver> {
 
 Widget Card(
     context, String name, String Taim, String distance, String latlong) {
+  //30m distance /latlong openMap
   Future<void> openMap() async {
     String googleUrl =
         'https://www.google.com/maps/search/?api=1&query=$latlong';
@@ -257,13 +258,7 @@ Widget Card(
   }
 
   filterLocation.add(name);
-  print("filterLocation");
-  print(filterLocation);
-  final TextStyle cardTextStyle =
-      Theme.of(context).textTheme.subtitle1.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          );
+
   var screenWidth = MediaQuery.of(context).size.width;
   var screenHeight = MediaQuery.of(context).size.height;
   return Container(
@@ -469,12 +464,4 @@ Widget Card(
           )),
     ),
   );
-}
-
-class BankTheme {
-  static const Color black = Color(0xFF1B1E49);
-
-  static const Color primary = Color(0xFF2B2A65);
-
-  static const Color orange = Color(0xFFF5654E);
 }

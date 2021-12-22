@@ -12,7 +12,7 @@ Future<studentData> createStudents(String name, String latitude,
       'name': name.trim(),
       'latitude': latitude.trim(),
       'longitude': longitude.trim(),
-      'location': location.trim(),
+      'location': location.trim(), //imp
       'class': classR.trim(),
       'phone': phone.trim(),
     },
