@@ -16,6 +16,7 @@ class map extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+//
 class _HomeState extends State<map> {
   GoogleMapController mapController; //contrller for Google map
   final Set<Marker> markers = new Set(); //markers for google map
@@ -118,11 +119,15 @@ class _HomeState extends State<map> {
     );
   }
 
+  int Counter = 0;
   Set<Marker> getmarkers(List<DataS> dataList) {
     setState(() {
       for (int i = 0; i < dataList.length; i++) {
         print('${dataList[i].latitude}/${dataList[i].longitude}');
         setState(() {
+          dataList[i].location == widget.location
+              ? Counter = Counter + 1
+              : Counter = Counter + 0;
           dataList[i].location == widget.location
               ? markers.add(Marker(
                   //add first marker
@@ -133,7 +138,7 @@ class _HomeState extends State<map> {
                   infoWindow: InfoWindow(
                     //popup info
                     title: dataList[i].name,
-                    snippet: dataList[i].phone,
+                    snippet: dataList[i].phone + "($Counter)",
                   ),
                   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
                 ))
