@@ -214,7 +214,7 @@ class _State extends State<HomePageDriver> {
                           "7:50",
                           distance.toString(),
                           '[${filter[index].latitude},${filter[index].longitude}]') //[32.22222,35.25566]
-                      : Text("");
+                      : Container();
                 }),
               ),
             ),

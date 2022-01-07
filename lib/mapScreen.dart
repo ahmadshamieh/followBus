@@ -39,6 +39,7 @@ class _HomeState extends State<map> {
     List<int> vertex = new List<int>();
 
     var polygonCoords = List<LatLng>();
+    polygonCoords.add(LatLng(32.53697207062393, 35.855356080087624));
     for (int i = 0; i < widget.datas.length; i++) {
       print(widget.datas[i].name);
       widget.datas[i].location == widget.location
@@ -122,6 +123,19 @@ class _HomeState extends State<map> {
   int Counter = 0;
   Set<Marker> getmarkers(List<DataS> dataList) {
     setState(() {
+      markers.add(Marker(
+        //add first marker
+        markerId: MarkerId(showLocation.toString()),
+        position: LatLng(32.53697207062393, 35.855356080087624),
+        //    : showLocation, //position of marker
+        infoWindow: InfoWindow(
+          //popup info
+          title: "school",
+          snippet: "Start",
+        ),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueBlue), //Icon for Marker
+      ));
       for (int i = 0; i < dataList.length; i++) {
         print('${dataList[i].latitude}/${dataList[i].longitude}');
         setState(() {
